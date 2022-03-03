@@ -1,0 +1,34 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: spring-k8-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: spring-k8-app
+  template:
+    metadata:
+      labels:
+        app: spring-k8-app
+    spec:
+      containers:
+      - name: spring-k8-app
+        image: aamir12/spring-k8-app
+        imagePullPolicy: Always
+        ports:
+        - containerPort: 8085
+# service type loadbalancer
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: spring-k8-app-svc
+spec:
+  selector:
+    app: spring-k8-app
+  ports:
+    - protocol: TCP
+      port: 8085
+      targetPort: 8085
+  type: LoadBalancer
